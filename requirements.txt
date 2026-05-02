@@ -1,0 +1,6 @@
+pandas
+requests
+yfinance
+pyspark==3.5.3
+psycopg
+pyarrow
