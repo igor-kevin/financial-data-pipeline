@@ -65,3 +65,20 @@ if __name__ == '__main__':
     print('ok')
     load_gold_to_postgres()
     print('golded')
+
+    cur = conexao.cursor()
+    query = """
+        SELECT
+            ticker,
+            count(*) AS registro,
+            ROUND(AVG(pct_do_cdi_365d)::numeric, 3) AS media_pct_365d,
+            ROUND(MIN(drawdown)::numeric, 4) AS pior_drawdown
+        FROM
+            financial_data
+        GROUP BY
+            ticker
+        ORDER BY
+            ticker
+    """
+    out = cur.execute(query).fetchall()
+    print(out)
