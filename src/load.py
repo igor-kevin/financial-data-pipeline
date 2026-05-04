@@ -33,8 +33,9 @@ def load_gold_to_postgres():
         'drawdown'
 
     ]
-    df = df.where(pd.notnull(df), None)
     df = df[colunas]
+    df = df.replace({float('nan'): None})
+
     print(df)
     records = list(df.itertuples(index=False, name=None))
     con = new_conn()
@@ -52,7 +53,6 @@ def load_gold_to_postgres():
         ON CONFLICT (date, ticker) DO NOTHING;
     '''
     cursor.executemany(query, records)
-    print('lel')
     con.commit()
     print(f' {cursor.rowcount} registros foram inseridos com sucesso')
     cursor.close()
@@ -71,7 +71,9 @@ if __name__ == '__main__':
         SELECT
             ticker,
             count(*) AS registro,
-            ROUND(AVG(pct_do_cdi_365d)::numeric, 3) AS media_pct_365d,
+            COUNT(pct_do_cdi_365d) AS nao_nulos,
+            COUNT(*) - COUNT(pct_do_cdi_365d) as nulos,
+            ROUND(AVG(pct_do_cdi_365d)::numeric, 2),
             ROUND(MIN(drawdown)::numeric, 4) AS pior_drawdown
         FROM
             financial_data
@@ -81,4 +83,5 @@ if __name__ == '__main__':
             ticker
     """
     out = cur.execute(query).fetchall()
-    print(out)
+    df_out = pd.DataFrame(out)
+    print(df_out)
