@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS financial_data (
+    id SERIAL PRIMARY KEY, 
+    date DATE,
+    ticker VARCHAR(10),
+    taxa_pct_diaria NUMERIC(10, 6),
+    close_price NUMERIC(15, 4),
+    daily_return NUMERIC(10, 6),
+    retorno_30d NUMERIC(10, 6),
+    retorno_180d NUMERIC(10, 6),
+    retorno_365d NUMERIC(10, 6),
+    cdi_30d NUMERIC(10, 6),
+    pct_do_cdi_30d NUMERIC(14, 5),
+    cdi_180d NUMERIC(10, 6),
+    pct_do_cdi_180d NUMERIC(14, 5),
+    cdi_365d NUMERIC(10, 6),
+    pct_do_cdi_365d NUMERIC(14, 5),
+    drawdown NUMERIC(10, 6),
+    created_at timestamp DEFAULT NOW(),
+    UNIQUE(date, ticker)
+)
