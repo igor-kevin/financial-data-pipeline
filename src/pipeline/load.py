@@ -2,23 +2,15 @@ import pandas as pd
 import psycopg
 from dotenv import load_dotenv
 import os
+from ..core.db import get_conn
 
 load_dotenv()
-print(f"USER: {os.getenv('DB_USER')}")
-print(f"PASS: {os.getenv('DB_PASSWORD')}")
-print(f"HOST: {os.getenv('DB_HOST')}")
-print(f"PORT: {os.getenv('DB_PORT')}")
-print(f"NAME: {os.getenv('DB_NAME')}")
+# print(f"USER: {os.getenv('DB_USER')}")
+# print(f"PASS: {os.getenv('DB_PASSWORD')}")
+# print(f"HOST: {os.getenv('DB_HOST')}")
+# print(f"PORT: {os.getenv('DB_PORT')}")
+# print(f"NAME: {os.getenv('DB_NAME')}")
 
-def new_conn():
-    print('conectando')
-    return psycopg.connect(
-        host=os.getenv('DB_HOST'),
-        port=os.getenv('DB_PORT'),
-        dbname=os.getenv('DB_NAME'),
-        user=os.getenv('DB_USER'),
-        password=os.getenv('DB_PASSWORD')
-    )
 
 
 def load_gold_to_postgres():
@@ -38,7 +30,7 @@ def load_gold_to_postgres():
 
     print(df)
     records = list(df.itertuples(index=False, name=None))
-    con = new_conn()
+    con = get_conn()
     cursor = con.cursor()
     query = '''
         INSERT INTO financial_data  (
@@ -61,7 +53,8 @@ def load_gold_to_postgres():
 
 
 if __name__ == '__main__':
-    conexao = new_conn()
+    print('getting con xd')
+    conexao = get_conn()
     print('ok')
     load_gold_to_postgres()
     print('golded')

@@ -1,3 +1,4 @@
 transform_bot.py
 *parquet
 .env
+__pycache__

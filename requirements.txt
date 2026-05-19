@@ -6,3 +6,5 @@ psycopg
 pyarrow
 dotenv
 psycopg-binary
+fastapi
+pydantic-settings
