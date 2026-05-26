@@ -21,11 +21,11 @@ const SummaryCard = ({ data }) => {
             </div>
             <div className={styles.row}>
                 <span className={styles.label}>vs CDI</span>
-                <span className={data.pct_do_cdi_365d >= 100 ? 'text-green-400' : 'text-red-400'}>
+                <span className={styles.corCdi}>
                     {formatCdiPercent(data.pct_do_cdi_365d)}
                 </span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className={styles.row}>
                 <span className={styles.label}>Drawdown</span>
                 <span className="text-red-400">
                     {formatPercent(data.drawdown)}
