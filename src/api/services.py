@@ -55,15 +55,17 @@ def get_metricas(ticker: str) -> List[TickerMetric]:
 def get_comparativo(ticker: str) -> list:
     query_comparativo = '''
         SELECT 
-            date, 
-            ticker, 
-            retorno_365d, 
-            cdi_365d
-        FROM 
-            financial_data
-        WHERE 
-            ticker IN (%s, '^BVSP')
-        ORDER BY date
+            a.date,
+            a.ticker,
+            a.retorno_365d,
+            a.cdi_365d,
+            b.retorno_365d AS ibov_365d
+        FROM financial_data a
+        JOIN financial_data b 
+            ON a.date = b.date 
+            AND b.ticker = '^BVSP'
+        WHERE a.ticker = %s
+        ORDER BY a.date
     '''
     args = ticker
     with get_conn() as conn:

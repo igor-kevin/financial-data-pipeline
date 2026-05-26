@@ -21,6 +21,7 @@ class TickerCompare(BaseModel):
     ticker: str
     retorno_365d: Optional[float] = None
     cdi_365d: Optional[float] = None
+    ibov_365d: Optional[float] = None
 
 
 class TickerResume(BaseModel):
