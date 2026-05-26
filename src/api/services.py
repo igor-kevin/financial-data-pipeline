@@ -9,11 +9,14 @@ def get_tickers() -> List[str]:
             ticker
         FROM 
            financial_data
+        WHERE 
+            ticker != '^BVSP'
+        ORDER BY
+            ticker
         """
 
     with get_conn() as conn:
         with conn.cursor() as cursor:
-            cursor = conn.cursor()
             cursor.execute(query_tickers)
             rows = cursor.fetchall()
 

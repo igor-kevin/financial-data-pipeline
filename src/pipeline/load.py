@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 from ..core.db import get_conn
 
+
 load_dotenv()
 # print(f"USER: {os.getenv('DB_USER')}")
 # print(f"PASS: {os.getenv('DB_PASSWORD')}")
