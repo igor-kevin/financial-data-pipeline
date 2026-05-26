@@ -3,3 +3,4 @@ transform_bot.py
 frontend/node_modules
 __pycache__
 .env
+__pycache__
