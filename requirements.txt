@@ -4,3 +4,5 @@ yfinance
 pyspark==3.5.3
 psycopg
 pyarrow
+dotenv
+psycopg-binary
