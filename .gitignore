@@ -1,2 +1,5 @@
 transform_bot.py
 *parquet
+frontend/node_modules
+__pycache__
+.env
