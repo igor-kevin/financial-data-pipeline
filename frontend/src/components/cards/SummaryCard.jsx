@@ -2,6 +2,7 @@ import { formatPercent, formatCdiPercent, formatCurrency } from '../../utils/for
 
 const SummaryCard = ({ data }) => {
     const styles = {
+        price: 'text-gray-200',
         label: 'text-gray-400',
         card: 'bg-gray-900 rounded-lg p-4 flex flex-col gap-2',
         titulo: 'text-white font-bold text-lg',
@@ -13,6 +14,12 @@ const SummaryCard = ({ data }) => {
     return (
         <div className={styles.card}>
             <h3 className={styles.titulo}>{data.ticker}</h3>
+            <div className={styles.row}>
+                <span className={styles.label}>Preço</span>
+                <span className={styles.price}>
+                    R$ {data.close_price}
+                </span>
+            </div>
             <div className={styles.row}>
                 <span className={styles.label}>Retorno 365d</span>
                 <span className={styles.corRetorno}>
