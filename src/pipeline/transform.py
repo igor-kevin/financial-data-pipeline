@@ -53,6 +53,27 @@ def build_gold(silver: pd.DataFrame) -> pd.DataFrame:
         )
     )
     print(df[df['date'] == pd.Timestamp("2026-01-30")])
+
+    df["ma20"] = df.groupby("ticker")["close_price"].transform(
+        lambda x: x.rolling(window=20).mean()
+    )
+    df["std20"] = df.groupby("ticker")["close_price"].transform(
+        lambda x: x.rolling(window=20).std()
+    )
+    df['bb_superior_20'] = df["ma20"] + (2 * df["std20"])
+    df['bb_inferior_20'] = df["ma20"] - (2 * df["std20"])
+
+    df["ma50"] = df.groupby("ticker")['close_price'].transform(
+        lambda x: x.rolling(window=50).mean()
+    )
+    df["std50"] = df.groupby("ticker")["close_price"].transform(
+        lambda x: x.rolling(window=50).std()
+    )
+    df['bb_inferior_50'] = df['ma50'] - (2 * df['std50'])
+    df['bb_superior_50'] = df['ma50'] + (2 * df['std50'])
+
+    df.drop(columns = ['std20', 'std50'], inplace=True)
+
     return df
 
 
