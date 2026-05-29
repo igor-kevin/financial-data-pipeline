@@ -57,8 +57,14 @@ def get_comparativo(ticker: str) -> list:
         SELECT 
             a.date,
             a.ticker,
+            a.retorno_30d,
+            a.retorno_180d,
             a.retorno_365d,
+            a.cdi_30d,
+            a.cdi_180d,
             a.cdi_365d,
+            b.retorno_30d AS ibov_30d,
+            b.retorno_180d AS ibov_180d,
             b.retorno_365d AS ibov_365d
         FROM financial_data a
         JOIN financial_data b 
@@ -88,8 +94,6 @@ def get_resumo() -> list:
             financial_data
         ORDER BY 
             ticker, date DESC
-
-
     '''
     with get_conn() as conexao:
         with conexao.cursor(row_factory=dict_row) as cursor:

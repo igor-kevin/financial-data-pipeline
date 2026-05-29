@@ -19,8 +19,14 @@ class TickerMetric(BaseModel):
 class TickerCompare(BaseModel):
     date: date
     ticker: str
+    retorno_30d: Optional[float] = None
+    retorno_180d: Optional[float] = None
     retorno_365d: Optional[float] = None
+    cdi_30d: Optional[float] = None
+    cdi_180d: Optional[float] = None
     cdi_365d: Optional[float] = None
+    ibov_30d: Optional[float] = None
+    ibov_180d: Optional[float] = None
     ibov_365d: Optional[float] = None
 
 
