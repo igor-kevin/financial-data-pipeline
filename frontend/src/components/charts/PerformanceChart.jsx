@@ -14,12 +14,12 @@ const transformarDados = (dados, ticker, periodo) => {
 const PerformanceChart = ({ticker}) => {
     const {comparativo, loading, error } = useComparativo(ticker)
     const [periodo, setPeriodo] = useState('365d')
-    const periodos = ['30d', '180d', '365d']
+    const periodos = [
+        { chave: '30d', label: '1M' },
+        { chave: '180d', label: '6M' },
+        { chave: '365d', label: '1A' },
+    ]
 
-    const loco = transformarDados(comparativo, ticker, periodo)
-    console.log('periodo:', periodo)
-    console.log('primeiro item comparativo:', comparativo[0])
-    console.log('primeiro item transformado:', loco[0])
     if (loading) {
         return <div>Carregando...</div>
     }
@@ -32,17 +32,18 @@ const PerformanceChart = ({ticker}) => {
     return (
         <div>
             <div className="flex gap-2 mb-4">
+                <p>Selecione o período acumulado:</p>
                 {periodos.map(p => (
                     <button
-                        key={p}
-                        onClick={() => setPeriodo(p)}
+                        key={p.chave}
+                        onClick={() => setPeriodo(p.chave)}
                         className={`px-3 py-1 rounded text-sm ${
-                            p === periodo 
+                            p.chave === periodo 
                                 ? 'bg-blue-600 text-white' 
                                 : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                         }`}
                     >
-                        {p}
+                        {p.label}
                     </button>
                 ))}
             </div>
