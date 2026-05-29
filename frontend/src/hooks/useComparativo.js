@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getComparativo } from "../api/financialApi";
 
 export const useComparativo = (ticker) => {
+    console.log('useComparativo chamado com ticker:', ticker)
     const [comparativo, setComparativo] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
