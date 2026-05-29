@@ -7,6 +7,12 @@ class TickerMetric(BaseModel):
     ticker: str
     close_price: float
     daily_return: Optional[float] = None
+    ma20: Optional[float] = None
+    ma50: Optional[float] = None
+    bb_superior_20: Optional[float] = None
+    bb_inferior_20: Optional[float] = None
+    bb_superior_50: Optional[float] = None
+    bb_inferior_50: Optional[float] = None
     retorno_30d: Optional[float] = None
     retorno_180d: Optional[float] = None
     retorno_365d: Optional[float] = None
