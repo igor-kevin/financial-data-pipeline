@@ -15,19 +15,19 @@ const SummaryCard = ({ data }) => {
         <div className={styles.card}>
             <h3 className={styles.titulo}>{data.ticker}</h3>
             <div className={styles.row}>
-                <span className={styles.label}>Preço</span>
+                <span className={styles.label}>Preço atual</span>
                 <span className={styles.price}>
                     R$ {data.close_price}
                 </span>
             </div>
             <div className={styles.row}>
-                <span className={styles.label}>Retorno 365d</span>
+                <span className={styles.label}>Retorno 1 Ano</span>
                 <span className={styles.corRetorno}>
                     {formatPercent(data.retorno_365d)}
                 </span>
             </div>
             <div className={styles.row}>
-                <span className={styles.label}>vs CDI</span>
+                <span className={styles.label}>vs CDI 1 Ano</span>
                 <span className={styles.corCdi}>
                     {formatCdiPercent(data.pct_do_cdi_365d)}
                 </span>
