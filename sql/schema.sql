@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS financial_data (
     ma20 NUMERIC(15, 5),
     ma50 NUMERIC(15, 5),
     bb_superior_20 NUMERIC(15, 5),
-    bb_inferior_20(15, 5),
+    bb_inferior_20 NUMERIC(15, 5),
     bb_superior_50 NUMERIC(15, 5),
     bb_inferior_50 NUMERIC(15, 5),
     daily_return NUMERIC(10, 6),
