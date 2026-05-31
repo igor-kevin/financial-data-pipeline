@@ -18,7 +18,9 @@ def load_gold_to_postgres():
     df = pd.read_parquet("data/gold/metrics.parquet")
 
     colunas = [ 
-        'date', 'ticker', 'taxa_pct_diaria', 'close_price', 'daily_return',
+        'date', 'ticker', 'taxa_pct_diaria', 'close_price',
+        'ma20', 'ma50', 'bb_superior_20', 'bb_inferior_20',
+        'bb_superior_50', 'bb_inferior_50', 'daily_return',
         'retorno_30d', 'retorno_180d', 'retorno_365d',
         'cdi_30d', 'pct_do_cdi_30d',
         'cdi_180d', 'pct_do_cdi_180d',
@@ -35,14 +37,17 @@ def load_gold_to_postgres():
     cursor = con.cursor()
     query = '''
         INSERT INTO financial_data  (
-            date, ticker, taxa_pct_diaria, close_price, daily_return,
+            date, ticker, taxa_pct_diaria, close_price,
+            ma20, ma50, bb_superior_20, bb_inferior_20,
+            bb_superior_50, bb_inferior_50,
+            daily_return,
             retorno_30d, retorno_180d, retorno_365d,
             cdi_30d, pct_do_cdi_30d,
             cdi_180d, pct_do_cdi_180d,
             cdi_365d, pct_do_cdi_365d,
             drawdown
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (date, ticker) DO NOTHING;
     '''
     cursor.executemany(query, records)
