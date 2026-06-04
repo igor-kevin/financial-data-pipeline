@@ -1,6 +1,7 @@
 import { useResumo } from '../hooks/useResumo'
 import SummaryCard from '../components/cards/SummaryCard'
 import PerformanceChart from '../components/charts/PerformanceChart'
+import DrawdownChart from '../components/charts/DrawdownChart'
 
 
 const Dashboard = ({ticker}) => {
@@ -22,7 +23,10 @@ const Dashboard = ({ticker}) => {
             </div>
 
             {ticker && (
-                <PerformanceChart ticker={ticker} />
+                <div>
+                    <PerformanceChart ticker={ticker} />
+                    <DrawdownChart ticker={ticker} />
+                </div>
             )}
         </div>
     )
