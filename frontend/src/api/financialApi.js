@@ -20,3 +20,8 @@ export const getMetricas = async (ticker) => {
     const response = await api.get(`/metricas/${ticker}`)
     return response.data
 }
+
+export const getBollinger = async (ticker) => {
+    const response = await api.get(`/bollinger/${ticker}`)
+    return response.data
+}

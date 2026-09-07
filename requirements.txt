@@ -8,3 +8,4 @@ dotenv
 psycopg-binary
 fastapi
 pydantic-settings
+cachetools

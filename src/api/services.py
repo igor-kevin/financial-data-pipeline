@@ -2,6 +2,8 @@ from psycopg.rows import dict_row
 from ..core.db import get_conn
 from .schemas import TickerMetric, TickerCompare, TickerResume
 from typing import List
+from cachetools import TTLCache, cached
+
 
 def get_tickers() -> List[str]:
     query_tickers = """
@@ -25,7 +27,7 @@ def get_tickers() -> List[str]:
 
 def get_metricas(ticker: str) -> List[TickerMetric]:
     query_metricas = """
-        SELECT 
+        SELECT
             date,
             ticker,
             close_price,
@@ -54,7 +56,7 @@ def get_metricas(ticker: str) -> List[TickerMetric]:
 
 def get_comparativo(ticker: str) -> list:
     query_comparativo = '''
-        SELECT 
+        SELECT
             a.date,
             a.ticker,
             a.retorno_30d,
@@ -67,8 +69,8 @@ def get_comparativo(ticker: str) -> list:
             b.retorno_180d AS ibov_180d,
             b.retorno_365d AS ibov_365d
         FROM financial_data a
-        JOIN financial_data b 
-            ON a.date = b.date 
+        JOIN financial_data b
+            ON a.date = b.date
             AND b.ticker = '^BVSP'
         WHERE a.ticker = %s
         ORDER BY a.date
@@ -100,6 +102,39 @@ def get_resumo() -> list:
             cursor.execute(query_resumo)
             resumo = cursor.fetchall()
     return [TickerResume(**row) for row in resumo] 
+
+
+cache_metricas = TTLCache(maxsize=6, ttl=3600)
+
+
+@cached(cache_metricas, key=lambda ticker: ticker)
+def get_bollinger(ticker: str) -> list:
+    query = """
+        SELECT
+            ticker,
+            date,
+            ma20,
+            ma50,
+            bb_superior_20,
+            bb_inferior_20,
+            bb_superior_50,
+            bb_inferior_50,
+            close_price
+        FROM
+            financial_data
+        WHERE
+            ticker = %s
+        ORDER BY
+            date
+    """
+    args = ticker
+    with get_conn() as conexao:
+        with conexao.cursor(row_factory=dict_row) as cursor:
+            cursor.execute(query, (args,))
+            resultado = cursor.fetchall()
+
+    return resultado
+
 
 if __name__ == '__main__':
     print(get_tickers())

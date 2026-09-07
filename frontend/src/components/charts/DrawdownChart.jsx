@@ -1,5 +1,5 @@
 import { useMetricas } from '../../hooks/useMetricas'
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid, ReferenceLine } from 'recharts'
 
 const DrawdownChart = ({ticker}) => {
     const {metricas, loading, error} = useMetricas(ticker)
@@ -13,7 +13,7 @@ const DrawdownChart = ({ticker}) => {
 
     const dados = metricas.map(m => ({
         date: m.date,
-        valor: m.close_price,
+        preco: m.close_price,
         drawdown: m.drawdown
     }
     ))
@@ -28,16 +28,29 @@ const DrawdownChart = ({ticker}) => {
                     }
                     />
                     <YAxis yAxisId='preco' orientation='left' />
-                    <YAxis yAxisId='drawdown' orientation='right' tickFormatter={(v) => `${(v*100).toFixed(0)}%`}/>
+                    <YAxis yAxisId='drawdown' orientation='right' domain={[-1, 0]} tickFormatter={(v) => `${(v*100).toFixed(0)}%`}/>
                     
-                    <Line yAxisId = 'preco' dataKey='valor' stroke = '#3b82f6' dot={false}/>
-                    <Line yAxisId = 'drawdown' dataKey='drawdown' stroke = '#ef4444' dot={false}/>
+                    <Line yAxisId= 'preco' dataKey='preco' name='Preço'stroke= '#3b82f6' dot={false}/>
+                    <Line yAxisId= 'drawdown' dataKey='drawdown' name='Drawdown' stroke= '#ef4444' dot={false}/>
                     <Tooltip
-                        formatter={(v) => `R$${(v).toFixed(2)}`}
-                        labelFormatter={(label) => `Data: ${label}`}
+                        formatter={(value, name) => {
+                            if (name === "Drawdown") {
+                                return [`${(value * 100).toFixed(2)}%`, name]
+                            }
+                            return [`R$ ${value.toFixed(2)}`, name]
+                        }}
+                        labelStyle={{ color: "gray" }}
+                        labelFormatter={(label) =>
+                            `Data: ${new Date(label).toLocaleDateString("pt-BR")}`
+                        }
+                    />
+                    <ReferenceLine
+                        y={-0.5}
+                        yAxisId="drawdown"
                     />
                     <Legend />
                     <CartesianGrid />
+                    
                 </LineChart>
             </ResponsiveContainer>
         </div>

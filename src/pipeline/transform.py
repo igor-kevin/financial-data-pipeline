@@ -90,4 +90,4 @@ if __name__ == "__main__":
     print(f"  Colunas: {gold.columns.tolist()}")
     print(gold.columns.tolist())
     print(gold[gold["ticker"] == "PETR4.SA"].tail(3))
-    print(gold[gold['ticker']=='ALUP11.SA'].tail(5))
+    print(gold[gold['ticker'] == 'ALUP11.SA'].tail(5))

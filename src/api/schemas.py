@@ -37,3 +37,15 @@ class TickerResume(BaseModel):
     retorno_30d: Optional[float] = None
     retorno_365d: Optional[float] = None
     close_price: Optional[float] = None
+
+
+class BollingerItem(BaseModel):
+    ticker: str
+    date: date
+    ma20: Optional[float]
+    ma50: Optional[float]
+    bb_superior_20: Optional[float]
+    bb_inferior_20: Optional[float]
+    bb_superior_50: Optional[float]
+    bb_inferior_50: Optional[float]
+    close_price: Optional[float]
