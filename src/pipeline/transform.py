@@ -1,5 +1,7 @@
 import pandas as pd
+import numpy as np
 from pathlib import Path
+from prophet import Prophet
 
 Path("data/silver").mkdir(parents=True, exist_ok=True)
 Path("data/gold").mkdir(parents=True, exist_ok=True)
@@ -52,7 +54,7 @@ def build_gold(silver: pd.DataFrame) -> pd.DataFrame:
             lambda janela: (janela.iloc[-1] / janela.max()) - 1
         )
     )
-    print(df[df['date'] == pd.Timestamp("2026-01-30")])
+    # print(df[df['date'] == pd.Timestamp("2026-01-30")])
 
     df["ma20"] = df.groupby("ticker")["close_price"].transform(
         lambda x: x.rolling(window=20).mean()
@@ -77,6 +79,45 @@ def build_gold(silver: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+# Função do prophet sem ajuste de dados com log
+def prever_aitvo(df: pd.DataFrame, ticker: str) -> pd.DataFrame:
+    dados = df[df['ticker'] == ticker][['date', 'close_price']]
+
+    dados = dados.rename(columns={'date': 'ds', 'close_price': 'y'})
+    
+    modelo = Prophet()
+    modelo.fit(dados)
+
+    future_df = modelo.make_future_dataframe(periods=30)
+    previsao = modelo.predict(future_df)
+    previsao['ticker'] = ticker
+    previsao['modelo'] = 'prophet'
+    
+    # print(f'Valor 30: {previsao['yhat'][490:]}')
+    return previsao
+
+
+def prever_aitvo_log(df: pd.DataFrame, ticker: str) -> pd.DataFrame:
+    dados = df[df['ticker'] == ticker][['date', 'close_price']]
+
+    dados = dados.rename(columns={'date': 'ds', 'close_price': 'y'})
+    
+    dados['y'] = np.log(dados['y'])
+    modelo = Prophet()
+    modelo.fit(dados)
+
+    future_df = modelo.make_future_dataframe(periods=30)
+    previsao = modelo.predict(future_df)
+    previsao['ticker'] = ticker
+    previsao['modelo'] = 'prophet_log'
+    
+    previsao['yhat'] = np.exp(previsao['yhat'])
+    previsao['yhat_lower'] = np.exp(previsao['yhat_lower'])
+    previsao['yhat_upper'] = np.exp(previsao['yhat_upper'])
+    # print(f'Valor 30: {previsao['yhat'][490:]}')
+    return previsao
+
+
 if __name__ == "__main__":
     print("Construindo Silver...")
     silver = build_silver()
@@ -91,3 +132,32 @@ if __name__ == "__main__":
     print(gold.columns.tolist())
     print(gold[gold["ticker"] == "PETR4.SA"].tail(3))
     print(gold[gold['ticker'] == 'ALUP11.SA'].tail(5))
+
+    ativos = []
+    print('Prevendo valores dos ativos:')
+    for ticker in gold["ticker"].unique():
+        print('Ativo atual: ', ticker)
+        previsao = prever_aitvo_log(gold, ticker)
+        previsao['ticker'] = ticker
+        print(' ✓ Valor previsto, iniciando próximo')
+        ativos.append(previsao)
+    df_ativos = pd.concat(ativos, ignore_index=True)
+    colunas_selecionadas = ['ds', 'ticker', 'yhat','yhat_lower', 'yhat_upper', 'modelo']
+    df_ativos = df_ativos[colunas_selecionadas]
+    print(f' ✓ Previsoes completas: \n {df_ativos.tail(3)}')
+
+    df_ativos = df_ativos.rename(columns={
+                                    'ds': 'date',
+                                    'yhat': 'previsao',
+                                    'yhat_lower': 'previsao_min',
+                                    'yhat_upper': 'previsao_max'})
+    ultima_data = gold.groupby('ticker')['date'].max()
+    futuros = []
+    for ticker in df_ativos['ticker'].unique():
+        mask = df_ativos['ticker'] == ticker
+        mask_data = df_ativos['date'] > pd.Timestamp(ultima_data[ticker])
+        futuros.append(df_ativos[mask & mask_data])
+
+    df_futuros = pd.concat(futuros, ignore_index=True)
+    df_futuros.to_parquet('data/gold/forecast.parquet', index=False)
+    print(f'Registros por ticker: {df_futuros.groupby('ticker').size()}')

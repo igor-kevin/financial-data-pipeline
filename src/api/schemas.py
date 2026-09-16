@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from datetime import date
 from typing import Optional
 
+
 class TickerMetric(BaseModel):
     date: date
     ticker: str
@@ -49,3 +50,12 @@ class BollingerItem(BaseModel):
     bb_superior_50: Optional[float]
     bb_inferior_50: Optional[float]
     close_price: Optional[float]
+
+
+class TickerForecast(BaseModel):
+    ticker: str
+    date: date
+    previsao: Optional[float]
+    previsao_min: Optional[float]
+    previsao_max: Optional[float]
+    modelo: str

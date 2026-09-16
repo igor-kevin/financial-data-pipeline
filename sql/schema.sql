@@ -23,4 +23,16 @@ CREATE TABLE IF NOT EXISTS financial_data (
     drawdown NUMERIC(10, 6),
     created_at timestamp DEFAULT NOW(),
     UNIQUE(date, ticker)
+);
+
+CREATE TABLE IF NOT EXISTS financial_forecast (
+    id SERIAL PRIMARY KEY,
+    date DATE,
+    ticker VARCHAR(20),
+    previsao NUMERIC(15, 4),
+    previsao_min NUMERIC(15, 4),
+    previsao_max NUMERIC(15, 4),
+    modelo VARCHAR(20) NOT NULL,
+    created_at timestamp DEFAULT NOW(),
+    UNIQUE(date, ticker, modelo)
 )

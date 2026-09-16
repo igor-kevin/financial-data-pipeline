@@ -25,3 +25,8 @@ export const getBollinger = async (ticker) => {
     const response = await api.get(`/bollinger/${ticker}`)
     return response.data
 }
+
+export const getForecast = async (ticker) => {
+    const response = await api.get(`/forecast/${ticker}`)
+    return response.data
+}

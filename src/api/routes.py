@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from .services import get_tickers, get_metricas, get_comparativo, get_resumo, get_bollinger
+from .services import get_tickers, get_metricas, get_comparativo, get_resumo, get_bollinger, get_forecast
 from .schemas import TickerCompare, TickerMetric, TickerResume, BollingerItem
 from typing import List
 
@@ -39,6 +39,14 @@ def bollinger(ticker: str):
     if not dados:
         raise HTTPException(status_code=404, detail='Ticker não encontrado')
     return dados
+
+
+@router.get('/forecast/{ticker}')
+def forecast(ticker: str):
+    forecast = get_forecast(ticker)
+    if not forecast:
+        raise HTTPException(status_code=404, detail='Dados não encontrados')
+    return forecast
 
 @router.get("/health")
 def health():

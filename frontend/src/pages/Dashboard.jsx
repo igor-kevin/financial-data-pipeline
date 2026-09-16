@@ -3,6 +3,7 @@ import SummaryCard from '../components/cards/SummaryCard'
 import PerformanceChart from '../components/charts/PerformanceChart'
 import DrawdownChart from '../components/charts/DrawdownChart'
 import BollingerChart from '../components/charts/BollingerChart'
+import ForecastChart from '../components/charts/ForecastChart'
 
 
 const Dashboard = ({ticker}) => {
@@ -28,6 +29,7 @@ const Dashboard = ({ticker}) => {
                     <PerformanceChart ticker={ticker} />
                     <DrawdownChart ticker={ticker} />
                     <BollingerChart ticker={ticker} />
+                    <ForecastChart ticker={ticker} />
                 </div>
             )}
         </div>

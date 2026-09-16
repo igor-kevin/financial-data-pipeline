@@ -57,6 +57,36 @@ def load_gold_to_postgres():
     con.close()
 
 
+def load_forecast_to_postgres():
+    df = pd.read_parquet('data/gold/forecast.parquet')
+
+    colunas = [
+        'date',
+        'ticker',
+        'previsao',
+        'previsao_min',
+        'previsao_max',
+        'modelo'
+    ]
+    query = '''
+        INSERT INTO financial_forecast (
+        date, ticker, previsao, previsao_min, previsao_max, modelo
+        )
+        values (%s, %s, %s, %s, %s, %s)
+        ON CONFLICT (date, ticker, modelo) DO NOTHING;
+    '''
+
+    df = df[colunas]
+    records = list(df.itertuples(index=False, name=None))
+
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.executemany(query, records)
+    print(f'{cursor.rowcount} previsões inseridas.')
+    conn.commit()
+    cursor.close()
+    conn.close()
+
 
 if __name__ == '__main__':
     print('getting con xd')
@@ -84,3 +114,6 @@ if __name__ == '__main__':
     out = cur.execute(query).fetchall()
     df_out = pd.DataFrame(out)
     print(df_out)
+
+    load_forecast_to_postgres()
+    print('forecasted')

@@ -9,11 +9,11 @@ export const useTickers = () =>{
     useEffect(() => {
         getTickers()
             .then(data => {
-                console.log('tickers:', data)  // adicione isso
+                console.log('tickers:', data) 
                 setTickers(data)
             })
             .catch(err => {
-                console.error('erro:', err)    // e isso
+                console.error('erro:', err)   
                 setError(err)
             })
             .finally(() => setLoading(false))

@@ -1,6 +1,6 @@
 from psycopg.rows import dict_row
 from ..core.db import get_conn
-from .schemas import TickerMetric, TickerCompare, TickerResume
+from .schemas import TickerMetric, TickerCompare, TickerResume, BollingerItem, TickerForecast
 from typing import List
 from cachetools import TTLCache, cached
 
@@ -133,11 +133,40 @@ def get_bollinger(ticker: str) -> list:
             cursor.execute(query, (args,))
             resultado = cursor.fetchall()
 
-    return resultado
+    return [BollingerItem(**row) for row in resultado]
+
+
+cache_forecast = TTLCache(maxsize=6, ttl=3600)
+
+
+@cached(cache_forecast, key=lambda ticker: ticker)
+def get_forecast(ticker) -> list:
+    query = """
+        SELECT
+            date,
+            ticker,
+            previsao,
+            previsao_min,
+            previsao_max,
+            modelo
+        FROM 
+            financial_forecast
+        WHERE 
+            ticker = %s
+        ORDER BY
+            date
+    """
+    args = ticker
+    with get_conn() as conn:
+        with conn.cursor(row_factory=dict_row) as cursor:
+            cursor.execute(query, (args,))
+            resultado = cursor.fetchall()
+    return [TickerForecast(**row) for row in resultado]
 
 
 if __name__ == '__main__':
     print(get_tickers())
     print(get_metricas('ALUP11.SA'))
-    print(get_comparativo('ALUP11.SA'))
-    print(get_resumo())
+    # print(get_comparativo('ALUP11.SA'))
+    # print(get_resumo())
+    print(get_forecast('ALUP11.SA'))
