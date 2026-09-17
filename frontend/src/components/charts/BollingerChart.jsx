@@ -30,14 +30,22 @@ const BollingerChart = ({ticker}) =>{
                     <XAxis dataKey='date'  tickFormatter = {(value) => 
                         new Date(value).toLocaleDateString('pt-BR')
                     }/>
-                    <Line dataKey='close_price' name='Preço' strokeWidth={1} stroke='#c3b9b9' dot={false}/>
+                    <Line dataKey='close_price' name={ticker} strokeWidth={1} dot={false}/>
                     <Line dataKey='ma20'  name='Media Móvel 20d' strokeWidth={0.4} stroke='#ebd727'dot={false}/>
                     <Line dataKey='ma50'  name='Media Móvel 50d' strokeWidth={0.4} stroke='#9d3232' dot={false}/>
-                    <Line dataKey='bb_superior_20' strokeDasharray='3 3' stroke='#e2dfdfae' dot={false}/>
-                    <Area stroke='none' dataKey={'bb_inferior_20'} fill='transparent' stackId={'bollinger'} baseValue={'minValor'}/>
-                    <Area stroke='none' dataKey={'banda'} fill='#5cb219' fillOpacity={0.1} stackId={'bollinger'} baseValue={'maxValor'}/>
+                    <Line dataKey='bb_superior_20' name='Bollinger Superior' strokeDasharray='3 3' stroke='#e2dfdfae' dot={false}/>
+                    <Area dataKey={'bb_inferior_20'} name='Bollinger Inferior' strokeDasharray='3 3' stroke='#e2dfdfae' fill='transparent' stackId={'bollinger'} baseValue={'minValor'}/>
+                    <Area stroke='none' dataKey={'banda'} fill='#5cb219' fillOpacity={0.1} legendType='none' stackId={'bollinger'} baseValue={'maxValor'} tooltipType='none'/>
 
-                    <Tooltip  />
+                    <Tooltip
+                        formatter={(value, name) => {
+                            return [`R$ ${value.toFixed(2)}`, name]
+                        }}
+                        labelStyle={{ color: "gray" }}
+                        labelFormatter={(label) =>
+                            `Data: ${new Date(label).toLocaleDateString("pt-BR")}`
+                        }
+                    />
                     <CartesianGrid />
                     <Legend />
                     

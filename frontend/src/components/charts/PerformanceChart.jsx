@@ -31,7 +31,7 @@ const PerformanceChart = ({ticker}) => {
 
     return (
         <div>
-            <div className="flex gap-2 mb-4">
+            <div className="px-3 flex gap-2 mb-4">
                 <p>Selecione o período acumulado:</p>
                 {periodos.map(p => (
                     <button
@@ -39,7 +39,7 @@ const PerformanceChart = ({ticker}) => {
                         onClick={() => setPeriodo(p.chave)}
                         className={`px-3 py-1 rounded text-sm ${
                             p.chave === periodo 
-                                ? 'bg-blue-600 text-white' 
+                                ? 'bg-blue-700 text-white' 
                                 : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                         }`}
                     >

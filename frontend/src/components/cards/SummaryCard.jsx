@@ -1,4 +1,4 @@
-import { formatPercent, formatCdiPercent, formatCurrency } from '../../utils/formatters'
+import { formatPercent, formatCdiPercent } from '../../utils/formatters'
 
 const SummaryCard = ({ data }) => {
     const styles = {
@@ -17,7 +17,7 @@ const SummaryCard = ({ data }) => {
             <div className={styles.row}>
                 <span className={styles.label}>Preço atual</span>
                 <span className={styles.price}>
-                    R$ {data.close_price}
+                    R$ {data.close_price.toFixed(2)}
                 </span>
             </div>
             <div className={styles.row}>

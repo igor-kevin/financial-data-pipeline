@@ -30,7 +30,7 @@ const DrawdownChart = ({ticker}) => {
                     <YAxis yAxisId='preco' orientation='left' />
                     <YAxis yAxisId='drawdown' orientation='right' domain={[-1, 0]} tickFormatter={(v) => `${(v*100).toFixed(0)}%`}/>
                     
-                    <Line yAxisId= 'preco' dataKey='preco' name='Preço'stroke= '#3b82f6' dot={false}/>
+                    <Line yAxisId= 'preco' dataKey='preco' name={ticker} dot={false}/>
                     <Line yAxisId= 'drawdown' dataKey='drawdown' name='Drawdown' stroke= '#ef4444' dot={false}/>
                     <Tooltip
                         formatter={(value, name) => {

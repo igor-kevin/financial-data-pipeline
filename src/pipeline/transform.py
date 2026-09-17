@@ -97,6 +97,7 @@ def prever_aitvo(df: pd.DataFrame, ticker: str) -> pd.DataFrame:
     return previsao
 
 
+# Prever ativos com o Prophet e ajuste de log
 def prever_aitvo_log(df: pd.DataFrame, ticker: str) -> pd.DataFrame:
     dados = df[df['ticker'] == ticker][['date', 'close_price']]
 
@@ -108,13 +109,15 @@ def prever_aitvo_log(df: pd.DataFrame, ticker: str) -> pd.DataFrame:
 
     future_df = modelo.make_future_dataframe(periods=30)
     previsao = modelo.predict(future_df)
+
     previsao['ticker'] = ticker
     previsao['modelo'] = 'prophet_log'
-    
+
     previsao['yhat'] = np.exp(previsao['yhat'])
     previsao['yhat_lower'] = np.exp(previsao['yhat_lower'])
     previsao['yhat_upper'] = np.exp(previsao['yhat_upper'])
     # print(f'Valor 30: {previsao['yhat'][490:]}')
+
     return previsao
 
 
