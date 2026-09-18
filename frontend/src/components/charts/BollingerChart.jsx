@@ -33,8 +33,8 @@ const BollingerChart = ({ticker}) =>{
                     <Line dataKey='close_price' name={ticker} strokeWidth={1} dot={false}/>
                     <Line dataKey='ma20'  name='Media Móvel 20d' strokeWidth={0.4} stroke='#ebd727'dot={false}/>
                     <Line dataKey='ma50'  name='Media Móvel 50d' strokeWidth={0.4} stroke='#9d3232' dot={false}/>
-                    <Line dataKey='bb_superior_20' name='Bollinger Superior' strokeDasharray='3 3' stroke='#e2dfdfae' dot={false}/>
-                    <Area dataKey={'bb_inferior_20'} name='Bollinger Inferior' strokeDasharray='3 3' stroke='#e2dfdfae' fill='transparent' stackId={'bollinger'} baseValue={'minValor'}/>
+                    <Line dataKey='bb_superior_20' name='Bollinger Superior' strokeDasharray='3 3' stroke='#18eeeed7' dot={false}/>
+                    <Area dataKey={'bb_inferior_20'} name='Bollinger Inferior' strokeDasharray='3 3' stroke='#18eeeed7' fill='transparent' stackId={'bollinger'} baseValue={'minValor'}/>
                     <Area stroke='none' dataKey={'banda'} fill='#5cb219' fillOpacity={0.1} legendType='none' stackId={'bollinger'} baseValue={'maxValor'} tooltipType='none'/>
 
                     <Tooltip

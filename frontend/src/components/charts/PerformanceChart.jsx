@@ -61,6 +61,8 @@ const PerformanceChart = ({ticker}) => {
                     <Tooltip
                         formatter={(v) => `${(v * 100).toFixed(2)}%`} 
                         labelFormatter={(label) => `Data: ${label}`}
+                        labelStyle={{ color: "gray" }}
+                        
                         />
                     <Legend />
                     <CartesianGrid />
