@@ -11,5 +11,33 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    depends_on:
+      - postgres
+
+  frontend:
+    build: ./frontend
+    ports:
+    - "5173:5173"
+    depends_on:
+    - api
+
+  pipeline:
+    build: .
+    command: python -m src.pipeline.extract && python -m src.pipeline.transform && python -m src.pipeline.load
+    depends_on:
+      - postgres
+    profiles:
+      - pipeline
+    
 volumes:
   postgres_data:
