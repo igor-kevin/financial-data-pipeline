@@ -22,15 +22,19 @@ const ForecastChart = ({ticker}) =>{
     const historico = metricas.filter(d=> new Date(d.date) >= dozeMesAtras)
         .map(d=> ({date: d.date, close_price: d.close_price, previsao: null}))
 
-    const futuro = forecast.map( d => ({
-        date: d.date,
-        close_price: null,
-        previsao: d.previsao,
-        previsao_min: d.previsao_min,
-        previsao_max: d.previsao_max,
-        area: d.previsao_max - d.previsao_min
-        })
-    )
+    const hoje = new Date()
+    hoje.setHours(0,0,0,0)
+
+    const futuro = forecast.filter(d => new Date(d.date)> hoje)
+        .map( d => ({
+            date: d.date,
+            close_price: null,
+            previsao: d.previsao,
+            previsao_min: d.previsao_min,
+            previsao_max: d.previsao_max,
+            area: d.previsao_max - d.previsao_min
+            })
+        )
     
     const dados = [...historico, ...futuro].sort((a, b) => new Date(a.date) - new Date(b.date))
     const minValorForecast = Math.min(...dados.map(d => d.previsao_min).filter(Boolean))

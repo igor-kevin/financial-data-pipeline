@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copia o código
 COPY src/ ./src/
-COPY .env .
+# COPY .env .
 
 # Expõe a porta da API
 EXPOSE 8000

@@ -33,7 +33,16 @@ services:
 
   pipeline:
     build: .
-    command: python -m src.pipeline.extract && python -m src.pipeline.transform && python -m src.pipeline.load
+    command: >
+      sh -c "python -m src.pipeline.extract && 
+           python -m src.pipeline.transform && 
+           python -m src.pipeline.load"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
     depends_on:
       - postgres
     profiles:

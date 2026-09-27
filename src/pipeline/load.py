@@ -5,7 +5,7 @@ import os
 from ..core.db import get_conn
 
 
-load_dotenv()
+load_dotenv(override=False)
 # print(f"USER: {os.getenv('DB_USER')}")
 # print(f"PASS: {os.getenv('DB_PASSWORD')}")
 # print(f"HOST: {os.getenv('DB_HOST')}")
@@ -73,7 +73,11 @@ def load_forecast_to_postgres():
         date, ticker, previsao, previsao_min, previsao_max, modelo
         )
         values (%s, %s, %s, %s, %s, %s)
-        ON CONFLICT (date, ticker, modelo) DO NOTHING;
+        ON CONFLICT (date, ticker, modelo) DO UPDATE
+        SET previsao = EXCLUDED.previsao,
+            previsao_min = EXCLUDED.previsao_min,
+            previsao_max = EXCLUDED.previsao_max,
+            created_at = NOW();
     '''
 
     df = df[colunas]

@@ -10,3 +10,4 @@ fastapi
 pydantic-settings
 cachetools
 uvicorn==0.29.0
+prophet
